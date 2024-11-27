@@ -1107,6 +1107,17 @@ void obs_hotkey_inject_event(obs_key_combination_t hotkey, bool pressed)
 	unlock();
 }
 
+void obs_hotkey_inject_hotkey_event(obs_hotkey_t *hotkey, bool pressed)
+{
+	if (!lock())
+		return;
+	if (!obs->hotkeys.reroute_hotkeys)
+		hotkey->func(hotkey->data, hotkey->id, hotkey, pressed);
+	else if (obs->hotkeys.router_func)
+		obs->hotkeys.router_func(obs->hotkeys.router_func_data, hotkey->id, pressed);
+	unlock();
+}
+
 void obs_hotkey_enable_background_press(bool enable)
 {
 	if (!lock())

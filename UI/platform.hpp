@@ -18,9 +18,10 @@
 #pragma once
 
 #include <util/c99defs.h>
-
 #include <string>
 #include <vector>
+
+#include <obsconfig.h>
 
 class QWidget;
 
@@ -106,4 +107,9 @@ MacPermissionStatus CheckPermissionWithPrompt(MacPermissionType type, bool promp
 #define CheckPermission(x) CheckPermissionWithPrompt(x, false)
 #define RequestPermission(x) CheckPermissionWithPrompt(x, true)
 void OpenMacOSPrivacyPreferences(const char *tab);
+#endif
+
+#if  defined(ENABLE_WAYLAND) && defined(__linux__) || defined(__FreeBSD__) || defined(__DragonFly__)
+void setupGlobalShortcutsPortal();
+void configureGlobalShortcutsPortal();
 #endif

@@ -7,6 +7,10 @@ target_link_libraries(obs-studio PRIVATE Qt::GuiPrivate Qt::DBus)
 
 target_sources(obs-studio PRIVATE system-info-posix.cpp)
 
+if (ENABLE_WAYLAND)
+  target_sources(obs-studio PRIVATE platform-wayland.cpp)
+endif()
+
 if(TARGET OBS::python)
   find_package(Python REQUIRED COMPONENTS Interpreter Development)
   target_link_libraries(obs-studio PRIVATE Python::Python)

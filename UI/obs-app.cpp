@@ -80,6 +80,8 @@
 #include <iostream>
 
 #include "ui-config.h"
+#include <obs-encoder.h>
+#include <obs-hotkey.h>
 
 using namespace std;
 
@@ -1302,6 +1304,20 @@ bool OBSApp::OBSInit()
 	connect(this, &QGuiApplication::applicationStateChanged,
 		[this](Qt::ApplicationState state) { ResetHotkeyState(state == Qt::ApplicationActive); });
 	ResetHotkeyState(applicationState() == Qt::ApplicationActive);
+#ifdef ENABLE_WAYLAND
+	if (QApplication::platformName().contains("wayland")) {
+		obs_enum_hotkey_bindings([](void *, size_t, obs_hotkey_binding_t *binding) {
+			qCritical() <<  obs_hotkey_get_name(obs_hotkey_binding_get_hotkey(binding)) << obs_hotkey_binding_get_key_combination(binding).key;
+			return true;
+		}, nullptr);
+		qDebug() << "asdäöasdkl";
+		obs_enum_hotkeys([](void *, size_t, obs_hotkey_t *binding) {
+			qCritical() <<  obs_hotkey_get_name(binding) << obs_hotkey_get_description(binding);
+			return true;
+		}, nullptr);
+	}
+	setupGlobalShortcutsPortal();
+#endif
 	return true;
 }
 

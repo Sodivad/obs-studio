@@ -236,6 +236,12 @@ void obs_nix_wayland_log_info(void)
 	blog(LOG_INFO, "Connected to Wayland server");
 }
 
+static bool print(void *, size_t idx, obs_hotkey_t *binding)
+{
+	blog(LOG_ERROR, "%lu %s", idx, binding->description);
+	return true;
+}
+
 static bool obs_nix_wayland_hotkeys_platform_init(struct obs_core_hotkeys *hotkeys)
 {
 	struct wl_display *display = obs_get_nix_platform_display();
@@ -246,6 +252,9 @@ static bool obs_nix_wayland_hotkeys_platform_init(struct obs_core_hotkeys *hotke
 	struct wl_registry *registry = wl_display_get_registry(display);
 	wl_registry_add_listener(registry, &registry_listener, hotkeys->platform_context);
 	wl_display_roundtrip(display);
+
+	blog(LOG_ERROR, "foooO");
+	// TODO david we dont have shortcuts here
 	return true;
 }
 
